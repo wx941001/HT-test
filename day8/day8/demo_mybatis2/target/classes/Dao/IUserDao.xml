@@ -13,16 +13,16 @@
     <select id="findAll" resultMap="userMap">
         select * from user
     </select>
-    <select id="findById" resultType="Domain.User">
+    <select id="findById" resultMap="userMap">
         select * from user where id=#{userId}
     </select>
 
-    <insert id="saveUser" parameterType="Domain.User" useGeneratedKeys="true" keyProperty="id">
-        insert into user(username,address,sex,birthday) values(#{username},#{address},#{sex},#{birthday})
+    <insert id="saveUser" parameterType="Domain.User" useGeneratedKeys="true" keyProperty="userId">
+        insert into user(username,address,sex,birthday) values(#{userName},#{userAddress},#{userSex},#{userBirthday})
     </insert>
 
-    <update id="updateUser" parameterType="Domain.User">
-        update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id=#{id}
+    <update id="updateUserById" parameterType="Domain.User">
+        update user set username=#{userName},birthday=#{userBirthday},sex=#{userSex},address=#{userAddress} where id=#{userId}
     </update>
 
     <delete id="deleteUerById" >
@@ -30,7 +30,7 @@
     </delete>
 
     <select id="findByName" resultType="Domain.User">
-        select * from user where username like #{username}
+        select * from user where username like #{userName}
     </select>
     <select id="count" resultType="Integer">
         select count(*) from user

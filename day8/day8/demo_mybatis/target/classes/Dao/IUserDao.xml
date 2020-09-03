@@ -14,7 +14,7 @@
         insert into user(username,address,sex,birthday) values(#{username},#{address},#{sex},#{birthday})
     </insert>
 
-    <update id="updateUser" parameterType="Domain.User">
+    <update id="updateUserById" parameterType="Domain.User">
         update user set username=#{username},birthday=#{birthday},sex=#{sex},address=#{address} where id=#{id}
     </update>
 

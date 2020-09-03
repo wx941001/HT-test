@@ -1,6 +1,5 @@
 import Dao.IUserDao;
 import Domain.QueryVo;
-import Domain.QueryVoIds;
 import Domain.User;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -12,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -33,50 +31,38 @@ public class UserDaoCrudTest {
         //5.使用SqlSession创建dao接口的代理对象
         userDao = session.getMapper(IUserDao.class);
     }
-    @Test
-    public void testFindAll() {
-        List<User> users=userDao.findAll();
-        Assert.assertEquals(9,users.size());
-    }
+
     @Test
     public void testFindOne() {
         User user=userDao.findById(41);
         System.out.println(user);
-        Assert.assertEquals("张三",user.getUserName());
+        Assert.assertEquals("张三",user.getUsername());
     }
     @Test
     public void testSave() {
         User user=new User();
-        user.setUserName("华泰");
-        user.setUserAddress("南京市建邺区");
-        user.setUserSex("男");
-        user.setUserBirthday(new Date());
+        user.setUsername("华泰");
+        user.setAddress("南京市建邺区");
+        user.setSex("男");
+        user.setBirthday(new Date());
         int id = userDao.saveUser(user);
-        User queryUser = userDao.findById(user.getUserId());
-        Assert.assertEquals("华泰",queryUser.getUserName());
+        User queryUser = userDao.findById(user.getId());
+        Assert.assertEquals("华泰",queryUser.getUsername());
     }
     @Test
     public void testUpdate() {
-        int id=54;
+        int id=55;
         User user=userDao.findById(id);
-        User user2=userDao.findById(id);
-        Assert.assertEquals(user.getSupperAddress(),user2.getSupperAddress());
-        user.setUserId(id);
-        user.setUserAddress("南京市仙武区");
-        user.setUserSex("女");
+        user.setId(id);
+        user.setAddress("南京市仙武区");
+        user.setSex("女");
 
         int res = userDao.updateUserById(user);
 
         User updatedUser=userDao.findById(id);
-        Assert.assertEquals("南京市仙武区",updatedUser.getUserAddress());
+        Assert.assertEquals("南京市仙武区",updatedUser.getAddress());
     }
-    @Test
-    public void testCache_lev1() {
-        int id = 54;
-        User user = userDao.findById(id);
-        User user2 = userDao.findById(id);
-        Assert.assertEquals(user.getSupperAddress(), user2.getSupperAddress());
-    }
+
     @Test
     public void testDeleteUser() {
         int id = 54;
@@ -100,17 +86,6 @@ public class UserDaoCrudTest {
         queryVo.setAddress("%南京%");
         List<User> users = userDao.findByVo(queryVo);
         Assert.assertEquals(1,users.size());
-    }
-    @Test
-    public void testFindInIds(){
-        QueryVoIds queryVoIds= new QueryVoIds();
-        List<Integer> ids=new ArrayList<Integer>();
-        ids.add(45);
-        ids.add(46);
-        ids.add(53);
-        queryVoIds.setIds(ids);
-        List<User> users = userDao.findInIds(queryVoIds);
-        Assert.assertEquals(3,users.size());
     }
     @After
     public void tearDown() throws Exception {
